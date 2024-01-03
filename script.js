@@ -32,30 +32,30 @@ function subtractTenSeconds() {
 
 let question1 = question(
   "question1",
-  "What is your favorote color?",
-  "green",
-  "blue",
-  "red",
-  "pink",
-  'green'
+  "Inside which HTML element do we put the JavaScript?",
+  "1. <js>",
+  "2. <javascript>",
+  "3. <scripting>",
+  "4. <script>",
+  '4. <script>'
 );
 let question2 = question(
   "question2",
-  "What is your favorote band?",
-  "relient k",
-  "green day",
-  "dorothy",
-  "black", 
-  'black'
+  "Where is the correct place to insert a JavaScript?",
+  "1. <body>",
+  "2. <nav>",
+  "3. <footer>",
+  "4. <header>", 
+  '1. <body>'
 );
 let question3 = question(
   "question3",
-  "What is your favorote ice cream?",
-  "vanilla",
-  "velvet",
-  "carpet",
-  "mustard",
-  'vanilla'
+  "How do you write 'Hello World' in an alert box?",
+  "1. msgBox('Hello World')",
+  "2. alert('Hello World')",
+  "3. msg('Hello World')",
+  "4. alertBox('Hello World')",
+  "2. alert('Hello World')"
 );
 
 // create function to show which question the user is on
@@ -112,7 +112,7 @@ function answerClick() {
   buttons.forEach(function (button) {
     button.addEventListener("click", function () {
       if(button.hasAttribute("data-answer", 'true')){
-        questionCard++
+        console.log('yes')
       }
     });
   });
