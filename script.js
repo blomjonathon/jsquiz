@@ -1,7 +1,7 @@
 let startButton = document.querySelector(".startButton");
 let hideHeader = document.querySelector("header");
 let answerDisplay = document.createElement("div");
-answerDisplay.className = "answerHidden answerDisplay"
+answerDisplay.className = "answerHidden answerDisplay";
 let countdownText = document.getElementById("countdown");
 let countdown = 75;
 let currentQuestion = 1;
@@ -9,6 +9,27 @@ let currentQuestion = 1;
 let questionCards = document.createElement("section");
 questionCards.id = "questionCards";
 document.body.appendChild(questionCards);
+
+let allDone = document.createElement("div");
+allDone.className = "allDone";
+let allDoneDivAlign = document.createElement("div");
+allDoneDivAlign.className = "allDoneDivAlign";
+let allDoneH2 = document.createElement("h2");
+allDoneH2.className = "allDoneH2";
+allDoneH2.textContent = "All done!";
+let scoreText = document.createElement("p");
+scoreText.textContent = "Your final score is ";
+let inputField = document.createElement("label");
+inputField.className = "inputField";
+let initialsLabel = document.createElement("p");
+initialsLabel.className = "initialsLabel";
+initialsLabel.textContent = "Enter Initials: ";
+let input = document.createElement("input");
+input.type = "text";
+input.id = "input";
+let sumbitButton = document.createElement("button");
+sumbitButton.className = "submitButton";
+sumbitButton.textContent = "Submit";
 
 // create function for countdown timer
 function timer() {
@@ -76,6 +97,15 @@ let question5 = question(
   "4. if function 5",
   "2. if (i = 5)"
 );
+let question6 = question(
+  "question6",
+  "How to write an IF statement for executing some code if 'i' is NOT equal to 5?",
+  "1. if i =! 5 then",
+  "2. if (i <> 5)",
+  "3. if i <> 5",
+  "4. if (i != 5)",
+  "4. if (i != 5)"
+);
 // create function to show which question the user is on
 function question(
   id,
@@ -140,15 +170,23 @@ function answerClick() {
     button.addEventListener("click", function () {
       currentQuestion++;
       showQuestion();
-      if (button.getAttribute('data-answer') === 'true') {
-        answerDisplay.classList.remove("answerHidden")
-        answerDisplay.textContent = 'Correct!'
+      if (button.getAttribute("data-answer") === "true") {
+        answerDisplay.classList.remove("answerHidden");
+        answerDisplay.textContent = "Correct!";
       } else {
-        answerDisplay.classList.remove('answerHidden')
-        answerDisplay.textContent = "Wrong!"
-        subtractTenSeconds()
-      } if(currentQuestion > 10){
-        console.log('done!')
+        answerDisplay.classList.remove("answerHidden");
+        answerDisplay.textContent = "Wrong!";
+        subtractTenSeconds();
+      }
+      if (currentQuestion > 6) {
+        document.body.appendChild(allDone);
+        allDone.appendChild(allDoneDivAlign);
+        allDoneDivAlign.appendChild(allDoneH2);
+        allDoneDivAlign.appendChild(scoreText);
+        allDoneDivAlign.appendChild(inputField);
+        inputField.appendChild(initialsLabel);
+        inputField.appendChild(input);
+        inputField.appendChild(sumbitButton);
       }
     });
   });
@@ -160,7 +198,7 @@ function showQuestion() {
     question.classList.add("hidden");
     if (question.id == "question" + currentQuestion) {
       question.classList.remove("hidden");
-      question.appendChild(answerDisplay)
+      question.appendChild(answerDisplay);
     }
   });
 }
@@ -173,6 +211,7 @@ startButton.addEventListener("click", function () {
   questionCards.appendChild(question3);
   questionCards.appendChild(question4);
   questionCards.appendChild(question5)
+  questionCards.appendChild(question6)
 
   answerClick();
   showQuestion();
