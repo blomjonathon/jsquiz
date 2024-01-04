@@ -74,6 +74,12 @@ header button:hover, #questionCards button:hover{
     color: white;
     background-color: purple;
 }
+.hidden{
+    display: none;
+}
+.answerHidden{
+    display: none;
+}
 .answerDisplay{
     color: lightgray;
     padding-top: 5px;

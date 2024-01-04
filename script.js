@@ -1,9 +1,10 @@
 let startButton = document.querySelector(".startButton");
 let hideHeader = document.querySelector("header");
 let answerDisplay = document.createElement("div");
-answerDisplay.className = "answerDisplay";
+answerDisplay.className = "answerHidden answerDisplay"
 let countdownText = document.getElementById("countdown");
 let countdown = 75;
+let currentQuestion = 1;
 
 let questionCards = document.createElement("section");
 questionCards.id = "questionCards";
@@ -37,7 +38,7 @@ let question1 = question(
   "2. <javascript>",
   "3. <scripting>",
   "4. <script>",
-  '4. <script>'
+  "4. <script>"
 );
 let question2 = question(
   "question2",
@@ -45,8 +46,8 @@ let question2 = question(
   "1. <body>",
   "2. <nav>",
   "3. <footer>",
-  "4. <header>", 
-  '1. <body>'
+  "4. <header>",
+  "1. <body>"
 );
 let question3 = question(
   "question3",
@@ -57,13 +58,39 @@ let question3 = question(
   "4. alertBox('Hello World')",
   "2. alert('Hello World')"
 );
-
+let question4 = question(
+  "question4",
+  "How do you create a function in JavaScript?",
+  "1. function = myfunction()",
+  "2. function: myfunction()",
+  "3. function myFunction()",
+  "4. function = ()",
+  "3. function myFunction()"
+);
+let question5 = question(
+  "question5",
+  "How to write an IF statement in JavaScript?",
+  "1. if i = 5 then",
+  "2. if (i = 5)",
+  "3. if i == 5",
+  "4. if function 5",
+  "2. if (i = 5)"
+);
 // create function to show which question the user is on
-function question(id, question, answerA, answerB, answerC, answerD, correctAnswer) {
+function question(
+  id,
+  question,
+  answerA,
+  answerB,
+  answerC,
+  answerD,
+  correctAnswer
+) {
   let questionCard = document.createElement("div");
-  questionCard.id = id 
+  questionCard.id = id;
+  questionCard.className = "hidden questionCard";
   let questionCardHeading = document.createElement("h2");
-  questionCardHeading.textContent = question
+  questionCardHeading.textContent = question;
 
   let answers = document.createElement("ul");
   answers.className = "answers";
@@ -75,23 +102,23 @@ function question(id, question, answerA, answerB, answerC, answerD, correctAnswe
 
   let answer1Button = document.createElement("button");
   answer1Button.className = "answerButton";
-  answer1Button.textContent = answerA
-  answer1Button.setAttribute('data-answer', answerA == correctAnswer)
+  answer1Button.textContent = answerA;
+  answer1Button.setAttribute("data-answer", answerA == correctAnswer);
 
   let answer2Button = document.createElement("button");
   answer2Button.className = "answerButton";
-  answer2Button.textContent = answerB
-  answer2Button.setAttribute('data-answer', answerB == correctAnswer)
+  answer2Button.textContent = answerB;
+  answer2Button.setAttribute("data-answer", answerB == correctAnswer);
 
   let answer3Button = document.createElement("button");
   answer3Button.className = "answerButton";
-  answer3Button.textContent = answerC
-  answer3Button.setAttribute('data-answer', answerC == correctAnswer)
+  answer3Button.textContent = answerC;
+  answer3Button.setAttribute("data-answer", answerC == correctAnswer);
 
   let answer4Button = document.createElement("button");
   answer4Button.className = "answerButton";
-  answer4Button.textContent = answerD
-  answer4Button.setAttribute('data-answer', answerD == correctAnswer)
+  answer4Button.textContent = answerD;
+  answer4Button.setAttribute("data-answer", answerD == correctAnswer);
 
   questionCard.appendChild(questionCardHeading);
   questionCardHeading.appendChild(answer1);
@@ -99,10 +126,10 @@ function question(id, question, answerA, answerB, answerC, answerD, correctAnswe
   questionCardHeading.appendChild(answer3);
   questionCardHeading.appendChild(answer4);
 
-  answer1.appendChild(answer1Button)
-  answer2.appendChild(answer2Button)
-  answer3.appendChild(answer3Button)
-  answer4.appendChild(answer4Button)
+  answer1.appendChild(answer1Button);
+  answer2.appendChild(answer2Button);
+  answer3.appendChild(answer3Button);
+  answer4.appendChild(answer4Button);
 
   return questionCard;
 }
@@ -111,15 +138,42 @@ function answerClick() {
 
   buttons.forEach(function (button) {
     button.addEventListener("click", function () {
-      if(button.hasAttribute("data-answer", 'true')){
-        console.log('yes')
+      currentQuestion++;
+      showQuestion();
+      if (button.getAttribute('data-answer') === 'true') {
+        answerDisplay.classList.remove("answerHidden")
+        answerDisplay.textContent = 'Correct!'
+      } else {
+        answerDisplay.classList.remove('answerHidden')
+        answerDisplay.textContent = "Wrong!"
+        subtractTenSeconds()
+      } if(currentQuestion > 10){
+        console.log('done!')
       }
     });
+  });
+}
+// hide all questions and show current question
+function showQuestion() {
+  let questions = document.querySelectorAll(".questionCard");
+  questions.forEach(function (question) {
+    question.classList.add("hidden");
+    if (question.id == "question" + currentQuestion) {
+      question.classList.remove("hidden");
+      question.appendChild(answerDisplay)
+    }
   });
 }
 // create event listener for start button
 startButton.addEventListener("click", function () {
   timer();
   hideHeader.innerHTML = "";
-  questionCards.appendChild(question1)
+  questionCards.appendChild(question1);
+  questionCards.appendChild(question2);
+  questionCards.appendChild(question3);
+  questionCards.appendChild(question4);
+  questionCards.appendChild(question5)
+
+  answerClick();
+  showQuestion();
 });
