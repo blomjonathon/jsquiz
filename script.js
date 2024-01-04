@@ -18,7 +18,6 @@ let allDoneH2 = document.createElement("h2");
 allDoneH2.className = "allDoneH2";
 allDoneH2.textContent = "All done!";
 let scoreText = document.createElement("p");
-scoreText.textContent = "Your final score is ";
 let inputField = document.createElement("label");
 inputField.className = "inputField";
 let initialsLabel = document.createElement("p");
@@ -31,6 +30,23 @@ let sumbitButton = document.createElement("button");
 sumbitButton.className = "submitButton";
 sumbitButton.textContent = "Submit";
 
+let highScoresDiv1 = document.createElement("div");
+highScoresDiv1.className = "highScoresDiv1";
+let highScoresDiv2 = document.createElement("div");
+let highScoresDivH2 = document.createElement("h2");
+highScoresDiv2.className = "highScoresDivH2";
+highScoresDivH2.textContent = 'High Scores'
+let present = document.createElement("p");
+present.className = "present";
+let goBackButton = document.createElement("button");
+goBackButton.className = "goBackButton";
+goBackButton.textContent = "Go Back";
+clearButton = document.createElement('button')
+clearButton.className = 'clearButton'
+clearButton.textContent = 'Clear high scores'
+
+viewScoreButton = document.getElementById('#viewScore')
+
 // create function for countdown timer
 function timer() {
   function updateCountdown() {
@@ -39,7 +55,7 @@ function timer() {
       countdown--;
     } else {
       clearInterval(intervalId);
-      // insert game over elements and functionality
+      gameOver()
     }
   }
   let intervalId = setInterval(updateCountdown, 1000);
@@ -165,6 +181,7 @@ function question(
 }
 function answerClick() {
   let buttons = document.querySelectorAll(".answerButton");
+  let currentScore = 0;
 
   buttons.forEach(function (button) {
     button.addEventListener("click", function () {
@@ -173,12 +190,14 @@ function answerClick() {
       if (button.getAttribute("data-answer") === "true") {
         answerDisplay.classList.remove("answerHidden");
         answerDisplay.textContent = "Correct!";
+        currentScore++;
       } else {
         answerDisplay.classList.remove("answerHidden");
         answerDisplay.textContent = "Wrong!";
         subtractTenSeconds();
       }
       if (currentQuestion > 6) {
+        function gameOver(){
         document.body.appendChild(allDone);
         allDone.appendChild(allDoneDivAlign);
         allDoneDivAlign.appendChild(allDoneH2);
@@ -187,7 +206,28 @@ function answerClick() {
         inputField.appendChild(initialsLabel);
         inputField.appendChild(input);
         inputField.appendChild(sumbitButton);
+        scoreText.textContent = "Your final score is " + currentScore;
+        sumbitButton.addEventListener("click", function () {
+          allDone.innerHTML = ''
+          document.body.appendChild(highScoresDiv1)
+          highScoresDiv1.appendChild(highScoresDiv2)
+          highScoresDiv2.appendChild(highScoresDivH2)
+          highScoresDivH2.appendChild(present)
+          highScoresDivH2.appendChild(goBackButton)
+          highScoresDivH2.appendChild(clearButton)
+
+          let userInitials = input.value;
+          let storedScore = userInitials.toString() + " - " + currentScore
+          localStorage.setItem(
+            "highScore",
+             storedScore.toString()
+          )
+          let retrievedScore = localStorage.getItem("highScore")
+          present.textContent = retrievedScore
+        });
       }
+      gameOver()
+    }
     });
   });
 }
@@ -202,6 +242,26 @@ function showQuestion() {
     }
   });
 }
+goBackButton.addEventListener("click", function(){
+  location.reload()
+})
+clearButton.addEventListener("click", function(){
+  localStorage.clear()
+  present.textContent = ''
+})
+viewScore.addEventListener('click', function(){
+  hideHeader.innerHTML = ''
+  allDone.innerHTML = ''
+  questionCards.innerHTML = ''
+  document.body.appendChild(highScoresDiv1)
+  highScoresDiv1.appendChild(highScoresDiv2)
+  highScoresDiv2.appendChild(highScoresDivH2)
+  highScoresDivH2.appendChild(present)
+  highScoresDivH2.appendChild(goBackButton)
+  highScoresDivH2.appendChild(clearButton)
+  retrievedScore = localStorage.getItem("highScore")
+  present.textContent = retrievedScore
+})
 // create event listener for start button
 startButton.addEventListener("click", function () {
   timer();
@@ -209,9 +269,10 @@ startButton.addEventListener("click", function () {
   questionCards.appendChild(question1);
   questionCards.appendChild(question2);
   questionCards.appendChild(question3);
+
   questionCards.appendChild(question4);
-  questionCards.appendChild(question5)
-  questionCards.appendChild(question6)
+  questionCards.appendChild(question5);
+  questionCards.appendChild(question6);
 
   answerClick();
   showQuestion();
